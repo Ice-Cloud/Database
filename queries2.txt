@@ -1,0 +1,199 @@
+INSERT USER
+
+INSERT INTO users (username,nume,prenume,email,pass,question1,question2,answer1,answer2,storageSpace,remaining)
+VALUES (user,num,prenum,em,password,q1,q2,a1,a2,storage,storage);
+
+poti pune aceeasi variabila pe ultimele doua pozitii ca doar cand creezi userul nu are
+deloc spatiu ocupat
+
+id il generezi tu random numai sa verifici sa nu fie deja in tabela
+poti de exemplu sa generezi tot timpul o valoare mai mare decat cea mai
+mare valoare existenta deja
+
+INSERT FILE
+
+vezi dupa tip in ce tabela adaugi
+			
+$handle = fopen($testpic, "rb");
+$img = fread($handle, filesize($testpic));
+fclose($handle);
+
+$img = base64_encode($img);
+
+$sql = "insert into images values(id,nume,uploadDate,size,'$img');"; - faci la fel ptr documents, media, others
+	
+- faci legatura cu userul corespunzator in userdata
+	
+INSERT INTO userdata(userdataID,username,documentFile,imageFile,mediaFile,othersFile)
+VALUES (id,user,nume,null,null,null)
+
+- si scazi dimensiunea fisierului din spatiu liber
+
+UPDATE users
+SET remaining = remaining - size
+WHERE username = user;
+
+id il generezi tu random
+
+- si ai grija ca upload sa fie de tip date sau ce o fi in php
+
+DELETE FILE
+
+- trimiti si tipul fisierului si stergi din tabela corespunzatoare
+
+DELETE FROM images
+WHERE nume=numeFisier;
+
+DELETE FROM media
+WHERE nume=numeFisier;
+
+DELETE FROM documents
+WHERE nume=numeFisier;
+
+DELETE FROM others
+WHERE nume=numeFisier;
+
+DELETE USER
+
+- faci prima data un select sa ii iei toate fisierele (gasesti mai jos) si le stergi prima data pe alea
+- dupa stergi din userdata
+
+DELETE FROM userdata
+WHERE username=user;
+
+- si numai dupa din users
+
+DELETE FROM users
+WHERE username = user;
+
+UPDATE USER
+
+updateUser(user,field,value)
+
+UPDATE users
+SET field = value
+WHERE username = user;
+
+sau cu email
+
+UPDATE users
+SET field = value
+WHERE email = em;
+
+UPDATE FILE
+
+updateFile(file,field,value)
+
+la updateFile sa nu il lasi sa schimbe numele ca altfel o sa trebuiasca
+ schimbat si in userdata
+ - sa trimiti o variabila care iti zice tipul de fisier si sa faci update
+ in tabela corespunzatoare
+ 
+ UPDATE images
+SET field = value
+WHERE nume = numeFis;
+
+ UPDATE media
+SET field = value
+WHERE nume = numeFis;
+ 
+ UPDATE others
+SET field = value
+WHERE nume = numeFis;
+
+ UPDATE documents
+SET field = value
+WHERE nume = numeFis;
+
+QUERY USER
+
+select * from users where username = user
+
+sau daca se logeaza cu email
+
+select * from users where email = em
+
+si daca vrei sa afizesi si fisierele o sa trebuiasca sa faci si queryAllFiles
+
+QUERY FILE
+
+queryFile - o sa trebuiasca sa trimiti o variabila ce sa iti zica
+tipul fisierului si sa faci una din cele 4 query-uri
+
+SELECT *
+FROM images as im
+INNER JOIN userdata as usr
+ON im.nume=usr.imageFile
+INNER JOIN users as user
+ON us.username=usr.username;
+
+SELECT *
+FROM media as md
+INNER JOIN userdata as usr
+ON md.nume=usr.mediaFile
+INNER JOIN users as user
+ON us.username=usr.username;
+
+SELECT *
+FROM documents as dc
+INNER JOIN userdata as usr
+ON dc.nume=usr.documentFile
+INNER JOIN users as user
+ON us.username=usr.username;
+
+SELECT *
+FROM others as ot
+INNER JOIN userdata as usr
+ON ot.nume=usr.othersFile
+INNER JOIN users as user
+ON us.username=usr.username;
+
+QUERY ALL FILES
+
+- aici trebuie sa le faci pe toate si cred ca trebuie schimbat
+ in baza de date la userdata in loc de document sa fie documentFile
+
+SELECT *
+FROM images as im
+INNER JOIN userdata as usr
+ON im.nume=usr.imageFile
+INNER JOIN users as user
+ON us.username=usr.username;
+
+SELECT *
+FROM media as md
+INNER JOIN userdata as usr
+ON md.nume=usr.mediaFile
+INNER JOIN users as user
+ON us.username=usr.username;
+
+SELECT *
+FROM documents as dc
+INNER JOIN userdata as usr
+ON dc.nume=usr.documentFile
+INNER JOIN users as user
+ON us.username=usr.username;
+
+SELECT *
+FROM others as ot
+INNER JOIN userdata as usr
+ON ot.nume=usr.othersFile
+INNER JOIN users as user
+ON us.username=usr.username;
+
+VERIFY USER WITH username
+
+verifyUser(user,password)
+
+SELECT * from users where username=user and pass=password
+
+si trebuie sa verifici sa iti returneze ceva
+
+
+VERIFY USER WITH email
+
+verifyUser(email1,password)
+
+SELECT * from users where email=email and pass=password
+
+si trebuie sa verifici sa iti returneze ceva
